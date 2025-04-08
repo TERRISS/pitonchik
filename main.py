@@ -1,13 +1,19 @@
+from typing import Dict, List, Any
+
 from fastapi import FastAPI
-from service import main
+from app.service import main
 
 app = FastAPI()
 
 @app.get("/currency_rates")
-def get_currency_rates():
+def get_currency_rates() -> dict:
     main()
-    return {"message": "Currency rates updated"}
+    # TODO return dict {
+    #
+    #  }
 
-if __name__ == '__main__':
-    import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    prarm = 23432
+    return {"message": prarm}
+
+# TODO: start uvicorn uvicorn main:app --reload --host 0.0.0.0 --port 8000
+# TODO: install uvicorn
