@@ -17,3 +17,7 @@ def get_currency_rates() -> dict:
 
 # TODO: start uvicorn uvicorn main:app --reload --host 0.0.0.0 --port 8000
 # TODO: install uvicorn
+
+# TODO: install black and isort
+# что бы исправить код black app
+# что бы исрпавить иморты isort app
