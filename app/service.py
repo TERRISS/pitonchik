@@ -6,11 +6,13 @@ from fastapi import requests
 from app.core.database import session
 from app.core.models import Currency
 
-def get_currency_rates(date) -> None:
+def fetch_data(date) -> str:
     url = f'https://cbr.ru/scripts/XML_daily.asp?date_req={date.strftime("%d/%m/%Y")}'
     response = requests.get(url)
-    soup = BeautifulSoup(response.text, 'xml')
+    return response.text
 
+def save_rates(data: str) -> None:
+    soup = BeautifulSoup(data, 'xml')
     records = soup.find_all('Record')
     for record in records:
         currency_id = record.get('Id')
@@ -20,12 +22,8 @@ def get_currency_rates(date) -> None:
 
     session.commit()
 
-
-#TODO: нейминг main сменить
-def main():
+def oooGore():
     today = datetime.today()
     yesterday = today - timedelta(days=1)
-    #TODO: перегруженный метод разделить на два
-    # 1. получает данные из ЦБ
-    # 2. сохраняет в БД
-    get_currency_rates(yesterday)
+    data = fetch_currency_data(yesterday)
+    save_currency_rates(data)
