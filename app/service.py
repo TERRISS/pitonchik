@@ -1,17 +1,13 @@
 from datetime import datetime, timedelta
-
 import requests
 from bs4 import BeautifulSoup
-
 from app.core.database import db_session
 from app.core.models import Currency
-
 
 def fetch_data(date) -> str:
     url = f'https://cbr.ru/scripts/XML_daily.asp?date_req={date.strftime("%d/%m/%Y")}'
     response = requests.get(url)
     return response.text
-
 
 def save_rates(data: str) -> None:
     soup = BeautifulSoup(data, "xml")
@@ -26,12 +22,11 @@ def save_rates(data: str) -> None:
 
     db_session.commit()
 
-
 def get_current_cours():
     today = datetime.today()
     yesterday = today - timedelta(days=1)
     data = fetch_data(yesterday)
     save_rates(data)
 
-
-# TODO: вернуть данные обратно на ручку
+def get_all_rates():
+    return db_session.query(Currency).all()

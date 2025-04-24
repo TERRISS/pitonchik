@@ -1,5 +1,4 @@
 import os
-
 from dotenv import load_dotenv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
@@ -19,13 +18,8 @@ from app.core.models import Currency
 # Создание таблиц (если их нет)
 Base.metadata.create_all(engine)
 
-
 # Создание фабрики сессий
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 # Получение сессии (вручную)
 db_session = SessionLocal()
-
-# TODO : сделать схему
-# TODO: install alembic (почитать что это)
-# TODO: alembic update head
