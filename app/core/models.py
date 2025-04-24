@@ -6,5 +6,9 @@ class Currency(Base):
 
     id = Column(Integer, primary_key=True)
     date = Column(Date)
-    currency = Column(String)
-    value = Column(String)
+    NumCode = Column(String)
+    CharCode = Column(String)
+    Nominal = Column(String)
+    Name = Column(String)
+    Value =  Column(String)
+
