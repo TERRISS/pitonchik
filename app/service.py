@@ -9,6 +9,7 @@ from app.core.models import Currency
 def fetch_data(date) -> str:
     url = f'https://cbr.ru/scripts/XML_daily.asp?date_req={date.strftime("%d/%m/%Y")}'
     response = requests.get(url)
+    response.encoding = 'utf-8' # Что бы не срало ISO-8859-1, решил попробовать utf-8
     return response.text
 
 def save_rates(data: str) -> None:
@@ -21,9 +22,9 @@ def save_rates(data: str) -> None:
             char_code = valute.CharCode.text
             nominal = valute.Nominal.text
             name = valute.Name.text
-            value = valute.Value.text
+            print(f"Saving: {num_code}, {char_code}, {nominal}, {name}")  # Логированием решил почекать чё оно выдаёт по символам
         except Exception as e:
-            print(e)
+            print(f"Error processing valute: {e}")
 
         db_session.add(
             Currency(
