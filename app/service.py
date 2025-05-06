@@ -11,7 +11,7 @@ import xml.etree.ElementTree as ET
 def fetch_data(date) -> str:
     url = f'https://cbr.ru/scripts/XML_daily.asp?date_req={date.strftime("%d/%m/%Y")}'
     response = requests.get(url)
-    response.encoding = 'windows-1251' # Что бы не срало ISO-8859-1, решил попробовать utf-8
+    response.encoding = 'windows-1251'
 
     return response.text
 
@@ -35,25 +35,25 @@ def parse_data(xml_text: str):
 def save_rates(data: List, currency_date: datetime) -> None:
     for dict_data in data:
         #TODO: взять каждый элемент словаря
-        num_code = ""
-        char_code = ""
-        nominal = ""
-        name = ""
-        value = ""
+        num_code = dict_data['num_code']
+        char_code = dict_data['char_code']
+        nominal = dict_data['nominal']
+        name = dict_data['name']
+        value = dict_data['value'] #взял
         #TODO: сделать проверку на currency_date, что бы не было повторяющихся данных
-        db_session.add(
-            Currency(
-                date=currency_date,
-                NumCode = num_code,
-                CharCode = char_code,
-                Nominal = nominal,
-                Name = name,
-                Value = value
+        existing_rate = db_session.query(Currency).filter_by(date=currency_date, NumCode=num_code).first() #Если existing_rate = None, то подобных данных ещё нету
+        if existing_rate is None:
+            db_session.add(
+                Currency(
+                    date = currency_date,
+                    NumCode = num_code,
+                    CharCode = char_code,
+                    Nominal = nominal,
+                    Name = name,
+                    Value = value
+                )
             )
-        )
-
     db_session.commit()
-
 
 def get_current_cours():
     today = datetime.today()
